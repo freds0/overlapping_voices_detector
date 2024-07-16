@@ -1,0 +1,55 @@
+{
+    "name": "whisper-medium-simple",
+    "n_gpu": 1,
+
+    "arch": {
+        "type": "WhisperDenseModelSimple",
+        "args": {
+            "input_dim": 1024
+        }
+    },
+    "data_loader": {
+        "type": "WhisperDataloaderSimple",
+        "args":{
+            "data_dir": "./dataset",
+            "train_filelist": "train_files.csv",
+            "test_filelist": "test_files.csv",
+            "val_filelist":  "val_files.csv",
+            "train_batch_size": 64,
+            "test_batch_size": 1,
+            "val_batch_size": 64,
+            "shuffle": true
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args":{
+            "lr": 0.001,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "loss": "bce_loss",
+    "metrics": [
+        "accuracy", "recall", "precision", "f1_score"
+    ],
+    "lr_scheduler": {
+        "type": "StepLR",
+        "args": {
+            "step_size": 10,
+            "gamma": 0.01
+        }
+    },
+    "trainer": {
+        "save_dir": "checkpoints",
+        "n_checkpoints": 2,
+        "log_dir": "logs",
+        "log_step": 10,
+        "save_period": 1,
+        "verbosity": 2,
+        "monitor": "max|f1_score",
+        "early_stop": 3,
+        "epochs": 30,
+        "tensorboard": true
+    }
+}
